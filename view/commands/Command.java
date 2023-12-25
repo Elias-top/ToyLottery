@@ -1,0 +1,25 @@
+package view.commands;
+
+import view.View;
+
+public abstract class Command {
+    private String description;
+    private View view;
+    
+    public Command(String description, View view)
+    {
+        this.description = description;
+        this.view = view;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    View getView()
+    {
+        return this.view;
+    }
+    public abstract void execute();   
+}
