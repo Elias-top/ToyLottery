@@ -24,19 +24,6 @@ public class OOS implements Writable
         } 
     }
 
-    // public <T> TreeItem<T> Read(String file_path)
-    // {
-    //     // Востановление из файла с помощью класса ObjectInputStream
-    //     try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file_path)))
-    //     {
-    //         return (TreeItem) ois.readObject();
-    //     }
-    //     catch(Exception ex){     
-    //         ex.printStackTrace();
-    //         return null;
-    //     } 
-    // }
-
     public Object Read(String file_path)
     {
         // Востановление из файла с помощью класса ObjectInputStream

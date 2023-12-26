@@ -9,8 +9,6 @@ import view.commands.DeleteToyFromList;
 import view.commands.EditChance;
 import view.commands.Exit;
 import view.commands.GetListToyInfo;
-// import view.commands.Load;
-// import view.commands.Save;
 import view.commands.StartLottery;
 
 public class AdminMainMenu {
@@ -24,8 +22,6 @@ public class AdminMainMenu {
         commandList.add(new EditChance(view));
         commandList.add(new GetListToyInfo(view));
         commandList.add(new StartLottery(view));
-        // commandList.add(new Save(view));
-        // commandList.add(new Load(view));
         commandList.add(new Exit(view));
     }
     

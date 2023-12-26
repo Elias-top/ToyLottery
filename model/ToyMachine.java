@@ -61,11 +61,13 @@ public class ToyMachine implements Serializable, SlotMachineInt{
     }
 
     public void removeItemFromList(int index){
+        Toy need_to_delete = null;
         for(Toy itemToy : toysList){
             if(itemToy.getId() == index){
-                toysList.remove(index - 1);
+                need_to_delete = itemToy;
             }
         }
+        toysList.remove(need_to_delete);
     }
 
     private boolean tryGetToy(Toy toy){

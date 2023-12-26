@@ -2,19 +2,15 @@ package view;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-import file_system.FS;
 import file_system.MakeLogBW;
-import file_system.OOS;
-import file_system.enums.StatusFileFS;
-import model.ToyMachine;
+import presenter.Presenter;
 
 public class ConsoleUI implements View{
     private Scanner scanner;
     private boolean inProgress;
     String file_path = "ToysList.out";
     String file_log_path = "LogFile.txt";
-    private ToyMachine toyMachine;
-    private FS fileOperationsOOS;
+    private Presenter presenter;
     private MakeLogBW makeLogBW ;
     private AdminMainMenu adminMainMenu;
     private UserMainMenu userMainMenu;
@@ -22,11 +18,10 @@ public class ConsoleUI implements View{
 
     public ConsoleUI(){
         makeLogBW = new MakeLogBW();
-        fileOperationsOOS = new FS(new OOS());
-        toyMachine = new ToyMachine();
         scanner = new Scanner(System.in);
         adminMainMenu = new AdminMainMenu(this);
         userMainMenu = new UserMainMenu(this);
+        presenter = new Presenter();
         load();
     }
 
@@ -80,7 +75,7 @@ public class ConsoleUI implements View{
             System.out.println("Введите название игрушки: ");
             String name = scanner.nextLine();
 
-            toyMachine.addNewItem(count, chance, name);
+            presenter.addNewItem(count, chance, name);
         }catch (NumberFormatException e){
             System.out.println("Введены некорректные данные ");
         }
@@ -93,31 +88,29 @@ public class ConsoleUI implements View{
 
             System.out.println("Введите новый шанс выподения данного типа игрушек от 0 до 100: ");
             int chance = Integer.parseInt(scanner.nextLine());
-            toyMachine.editChanceItem(index, chance);
+            presenter.editChanceItem(index, chance);
         }catch(NumberFormatException e){
             System.out.println("Введены некорректные данные ");
         }
     }
 
     public void getListToyInfo(){
-        toyMachine.getListItemsInfo();
+        presenter.getListItemsInfo();
     }
 
     public void startLottery(){
         try{
             System.out.println("Введите id игрушки, которую хотите получить");
             int index = Integer.parseInt(scanner.nextLine());
-
-            boolean result = toyMachine.startLottery(index);
-
+            boolean result = presenter.startLottery(index);
             if(result == true){
                 System.out.println("Поздравляем вы выйграли игрушку:");
-                System.out.println(toyMachine.getNameItemByID(index));
-                makeLogBW.writeToLogFile(file_log_path, user_login + " win toy " + toyMachine.getNameItemByID(index) + " " + LocalDateTime.now());
+                System.out.println(presenter.getNameItemByID(index));
+                makeLogBW.writeToLogFile(file_log_path, user_login + " win toy " + presenter.getNameItemByID(index) + " " + LocalDateTime.now());
             }
             else{
                 System.out.println("К сохалению вы проиграли :(");
-                makeLogBW.writeToLogFile(file_log_path, user_login + " not win toy " + toyMachine.getNameItemByID(index) + " " + LocalDateTime.now());
+                makeLogBW.writeToLogFile(file_log_path, user_login + " not win toy " + presenter.getNameItemByID(index) + " " + LocalDateTime.now());
             }
         }catch(NumberFormatException e){
             System.out.println("Введены некорректные данные ");
@@ -128,8 +121,7 @@ public class ConsoleUI implements View{
         try{
             System.out.println("Введите id игрушки, которую хотите удалить: ");
             int index = Integer.parseInt(scanner.nextLine());
-
-            toyMachine.removeItemFromList(index);
+            presenter.removeItemFromList(index);
         }catch(NumberFormatException e){
             System.out.println("Введены некорректные данные ");
         }
@@ -156,27 +148,12 @@ public class ConsoleUI implements View{
 
     private void save()
     {
-        if(fileOperationsOOS.Save(toyMachine, file_path) == StatusFileFS.FileSaved)
-        {
-            System.out.println("Файл со списком игрушек успешно был сохранен");
-        }
-        else
-        {
-            System.out.println("Произошла ошибка, файл со списком игрушек не был сохранен");
-        }
+        presenter.saveToysList(file_path);
     }
 
     private void load()
     {
-        if(fileOperationsOOS.IsFileExist(file_path) == true)
-        {
-            System.out.println("Файл с списком игрушек успешно был загружен");
-            toyMachine = (ToyMachine) fileOperationsOOS.Read(file_path);
-        }
-        else if (fileOperationsOOS.IsFileExist(file_path) == false)
-        {
-             return;
-        }
+        presenter.loadToysList(file_path);
     }
 
     private void error() {
